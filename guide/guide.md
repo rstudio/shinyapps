@@ -37,7 +37,7 @@ from GitHub at this time.
 
 Install the `shinyapps` package using `devtools`:
 
-    devtools::install_github('rstudio/shinyapps')
+    devtools::install_github('shinyapps', 'rstudio')
 
 After the `shinyapps` package has been installed, load it into your R session:
 
