@@ -10,7 +10,8 @@ Description: Interface for deploying shiny applications to the ShinyApps
 Imports:
     digest,
     RCurl,
-    RJSONIO
+    RJSONIO,
+    SuppDists
 License: GPL-2
 Collate:
     'http.R'
