@@ -10,6 +10,7 @@ To get started with ShinyApps you will need:
 - An R development environment
 - The latest version of the [`devtools` package](https://github.com/hadley/devtools)
 - The [`shinyapps` package](https://github.com/rstudio/shinyapps) from GitHub 
+- The [`rscrypt` package](https://github.com/rstudio/rscrypt) from GitHub 
 - A working shiny application on your machine
 - Windows: RTools for building packages
 - Mac OSX: XCode Command Line Tools for building packages
