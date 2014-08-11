@@ -336,7 +336,7 @@ devtools::install_github('rstudio/shinyapps')
 
 You will also need the scrypt package used for encrypting passwords.
 
-Install the `scrypt` package using `devtools`:
+Install the `rscrypt` package using `devtools`:
 
 ```S
 devtools::install_github('rstudio/rscrypt')
