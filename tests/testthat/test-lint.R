@@ -8,7 +8,7 @@ test_that("linter warns about absolute paths and relative paths", {
   printLinterResults(result)
   
   absPathLintedIndices <- result[[serverPath]]$absolute.paths$indices
-  expect_identical(as.numeric(absPathLintedIndices), c(15, 16, 17, 19))
+  expect_identical(as.numeric(absPathLintedIndices), c(15, 16, 17, 19, 22, 23))
   
   relPathLintedIndices <- result[[serverPath]]$invalid.relative.paths$indices
   expect_identical(as.numeric(relPathLintedIndices), 18)
