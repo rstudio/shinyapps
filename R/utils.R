@@ -132,3 +132,7 @@ rstudioEncoding <- function(dir) {
   enc <- drop(readDcf(proj, 'Encoding'))
   enc[!is.na(enc)]
 }
+
+`%||%` <- function(x, y) {
+  if(is.null(x)) { x } else { y }
+}

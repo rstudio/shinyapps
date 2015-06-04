@@ -19,6 +19,9 @@ shinyServer(function(input, output) {
     serverFile <- "\\\\server\\path\\to\\file"
     validWeblink <- "//www.google.com/"
 
+    text_file <- file.path("~/home/file.txt"),
+    user_text_file <- file.path("~user.name/home/file.txt"),
+
     # generate bins based on input$bins from ui.R
     x    <- faithful[, 2]
     bins <- seq(min(x), max(x), length.out = input$bins + 1)
