@@ -1,7 +1,7 @@
-rsconnect
+shinyapps
 =======================================================
 
-An R package used for deploying applications to the [ShinyApps](http://shinyapps.io/) hosted service.
+Warning! This package is deprecated. Please use the [rsconnect](https://github.com/rstudio/rsconnect) package instead.
 
 ## Installation
 
@@ -10,7 +10,7 @@ To install directly from GitHub, run this:
 ```r
 if (!require("devtools"))
   install.packages("devtools")
-devtools::install_github("rstudio/rsconnect")
+devtools::install_github("rstudio/shinyapps")
 ```
 
 ## Usage
