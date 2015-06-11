@@ -1,8 +1,6 @@
 shinyapps
 =======================================================
 
-Warning! This package is deprecated. Please use the [rsconnect](https://github.com/rstudio/rsconnect) package instead.
-
 ## Installation
 
 To install directly from GitHub, run this:
