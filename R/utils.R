@@ -40,8 +40,8 @@ withStatus <- function(quiet) {
 }
 
 httpDiagnosticsEnabled <- function() {
-  return (getOption("shinyapps.http.trace", FALSE) ||
-          getOption("shinyapps.http.verbose", FALSE))
+  return (getOption("rsconnect.http.trace", FALSE) ||
+          getOption("rsconnect.http.verbose", FALSE))
 }
 
 readPassword <- function(prompt) {
@@ -67,7 +67,7 @@ readPassword <- function(prompt) {
         # TODO: enable echo on Windows
       }
     }
-  
+
     echoOff()
     password <- readline(prompt)
     echoOn()
@@ -84,7 +84,7 @@ readDcf <- function(...) {
 
 
 #' Generate a line with embedded message
-#' 
+#'
 #' Generates a message, surrounded with \code{#}, that extends
 #' up to length \code{n}.
 #' @param message A string (single-line message).
@@ -131,4 +131,27 @@ rstudioEncoding <- function(dir) {
   if (length(proj) != 1L) return()  # there should be one and only one .Rproj
   enc <- drop(readDcf(proj, 'Encoding'))
   enc[!is.na(enc)]
+}
+
+# return the leaf from a path (e.g. /foo/abc/def -> def)
+fileLeaf <- function(path) {
+  components <- strsplit(path, "/")
+  unlist(lapply(components, function(component) {
+    component[length(component)]
+  }))
+}
+
+# whether the given path points to an individual piece of content
+isDocumentPath <- function(path) {
+  ext <- tolower(tools::file_ext(path))
+  !is.null(ext) && ext != "" && ext != "r"
+}
+
+# given a path, return the directory under which rsconnect package state is
+# stored
+rsconnectRootPath <- function(appPath) {
+  if (isDocumentPath(appPath))
+    file.path(dirname(appPath), "rsconnect", "documents", basename(appPath))
+  else
+    file.path(appPath, "rsconnect")
 }

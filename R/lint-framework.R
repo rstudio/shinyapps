@@ -1,9 +1,9 @@
 .__LINTERS__. <- new.env(parent = emptyenv())
 
 ##' Add a Linter
-##' 
+##'
 ##' Add a linter, to be used in subsequent calls to \code{\link{lint}}.
-##' 
+##'
 ##' @param name The name of the linter, as a string.
 ##' @param linter A \code{\link{linter}}.
 ##' @export
@@ -14,16 +14,16 @@ addLinter <- function(name, linter) {
 
 
 ##' Create a Linter
-##' 
-##' Generate a linter, which can identify errors or problematic regions in a 
+##'
+##' Generate a linter, which can identify errors or problematic regions in a
 ##' project.
-##' 
+##'
 ##' @param apply Function that, given the content of a file, returns the indices
 ##'   at which problems were found.
-##' @param takes Function that, given a set of paths, returns the subset of 
+##' @param takes Function that, given a set of paths, returns the subset of
 ##'   paths that this linter uses.
-##' @param message Function that, given content and lines, returns an 
-##'   informative message for the user. Typically generated with 
+##' @param message Function that, given content and lines, returns an
+##'   informative message for the user. Typically generated with
 ##'   \code{\link{makeLinterMessage}}.
 ##' @param suggestion String giving a prescribed fix for the linted problem.
 ##' @export
@@ -60,30 +60,39 @@ applyLinter <- function(linter, ...) {
 }
 
 ##' Lint a Project
-##' 
+##'
 ##' Takes the set of active linters (see \code{\link{addLinter}}), and applies
 ##' them to all files within a project.
-##' 
+##'
 ##' @param project Path to a project directory.
+##' @param files Specific files to lint. Can be NULL, in which case all
+##'   the files in the directory will be linted.
 ##' @export
-lint <- function(project) {
-  
+lint <- function(project, files = NULL) {
+
   if (!file.exists(project))
     stop("No directory at path '", project, "'")
-  
+
   if (file.exists(project) && !isTRUE(file.info(project)$isdir))
     stop("Path '", project, "' is not a directory")
-  
+
+  project <- normalizePath(project, mustWork = TRUE, winslash = "/")
+
   # Perform actions within the project directory (so relative paths are easily used)
   owd <- getwd()
   on.exit(setwd(owd))
   setwd(project)
-  
-  # List all files within the project
-  projectFiles <- list.files(full.names = TRUE, recursive = TRUE, all.files = TRUE)
+
+  # If the set of files wasn't specified, generate it
+  if (is.null(files)) {
+    files <- bundleFiles(project)
+  }
+
+  # List the files that will be bundled
+  projectFiles <- file.path(project, files)  %relativeTo% project
   projectFiles <- gsub("^\\./", "", projectFiles)
   names(projectFiles) <- projectFiles
-  
+
   # Do some checks for a valid application structure
   appFilesBase <- tolower(list.files())
   wwwFiles <- tolower(list.files("www/"))
@@ -91,54 +100,66 @@ lint <- function(project) {
     shinyAndUi = all(c("server.r", "ui.r") %in% appFilesBase),
     shinyAndIndex = "server.r" %in% appFilesBase && "index.html" %in% wwwFiles,
     app = "app.r" %in% appFilesBase,
-    Rmd = any(grepl(glob2rx("*.rmd"), appFilesBase))
+    Rmd = any(grepl(glob2rx("*.rmd"), appFilesBase)),
+    static = any(grepl("^.*\\.html?$", appFilesBase))
   )
-  
+
   if (!any(satisfiedLayouts)) {
     msg <- "Cancelling deployment: invalid project layout.
             The project should have one of the following layouts:
             1. 'shiny.R' and 'ui.R' in the application base directory,
             2. 'shiny.R' and 'www/index.html' in the application base directory,
-            3. An R Markdown (.Rmd) document."
-    
+            3. An R Markdown (.Rmd) document,
+            4. A static HTML (.html) document."
+
     # strip leading whitespace from the above
     msg <- paste(collapse = "\n",
                  gsub("^ *", "", unlist(strsplit(msg, "\n", fixed = TRUE))))
-                 
+
     stop(msg)
   }
-  
+
   linters <- mget(objects(.__LINTERS__.), envir = .__LINTERS__.)
-  
+
   # Identify all files that will be read in by one or more linters
   projectFilesToLint <- Reduce(union, lapply(linters, function(linter) {
     getLinterApplicableFiles(linter, projectFiles)
   }))
-  
+
   # Read in the files
   # TODO: perform this task more lazily?
   projectContent <- suppressWarnings(lapply(projectFilesToLint, readLines))
   names(projectContent) <- projectFilesToLint
   lintResults <- vector("list", length(linters))
   names(lintResults) <- names(linters)
-  
+
   ## Apply each linter
   for (i in seq_along(linters)) {
     linter <- linters[[i]]
     applicableFiles <- getLinterApplicableFiles(linter, projectFilesToLint)
     lintIndices <- vector("list", length(applicableFiles))
     names(lintIndices) <- applicableFiles
-    
+
     ## Apply linter to each file
     for (j in seq_along(applicableFiles)) {
       file <- applicableFiles[[j]]
-      lintIndices[[j]] <- applyLinter(linter,
-                                      projectContent[[file]],
-                                      project = project,
-                                      path = file,
-                                      files = projectFiles)
+      tryCatch(
+        expr = {
+          lintIndices[[j]] <- applyLinter(linter,
+                                          projectContent[[file]],
+                                          project = project,
+                                          path = file,
+                                          files = projectFiles)
+        },
+        error = function(e) {
+          message("Failed to lint file '", file, "'")
+          message("The linter failed with message:\n")
+          message(e$message)
+          lintIndices[[j]] <- numeric(0)
+        }
+      )
     }
-    
+
     ## Get the messages associated with each lint
     lintMessages <- enumerate(lintIndices, function(x, i) {
       if (length(x)) {
@@ -152,7 +173,7 @@ lint <- function(project) {
         character()
       }
     })
-    
+
     ## Assign the result
     lintResults[[i]] <- list(
       files = applicableFiles,
@@ -160,14 +181,14 @@ lint <- function(project) {
       message = lintMessages,
       suggestion = linter$suggestion
     )
-    
+
   }
-  
+
   ## Get all of the linted files, and transform the results into a by-file format
   lintedFiles <- Reduce(union, lapply(lintResults, function(x) {
     names(x$indices)
   }))
-  
+
   lintFields <- c("indices", "message")
   fileResults <- lapply(lintedFiles, function(file) {
     result <- lapply(lintResults, function(result) {
@@ -235,4 +256,26 @@ collectSuggestions <- function(fileResults) {
     }))
   })
   Reduce(union, suggestions)
+}
+
+`%relativeTo%` <- function(paths, directory) {
+
+  nd <- nchar(directory)
+
+  unlist(lapply(paths, function(path) {
+    np <- nchar(path)
+    if (nd > np) {
+      warning("'", path, "' is not a subdirectory of '", directory, "'")
+      return(path)
+    }
+
+    if (substring(path, 1, nd) != directory) {
+      warning("'", path, "' is not a subdirectory of '", directory, "'")
+      return(path)
+    }
+
+    offset <- if (substring(directory, nd, nd) == "/") 1 else 2
+    substring(path, nd + offset, np)
+  }))
+
 }

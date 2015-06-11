@@ -1,7 +1,7 @@
 library(shiny)
 
 shinyServer(function(input, output, session) {
-  
+
   # output sessionInfo
   output$sessionInfo <- renderPrint({
     sessionInfo()
@@ -17,11 +17,11 @@ shinyServer(function(input, output, session) {
           "search: ",   session$clientData$url_search,   "\n"
     )
   })
-  
+
   # output userInfo
   output$userInfo <- renderText({
     paste(sep="",
           "user: ", session$user, "\n")
   })
-  
+
 })
