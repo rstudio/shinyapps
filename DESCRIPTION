@@ -1,4 +1,4 @@
-Package: rsconnect
+Package: shinyapps
 Type: Package
 Title: Deployment Interface for Shiny Applications
 Version: 0.4.0
