@@ -370,7 +370,7 @@ httpVerbose <- function() {
 }
 
 httpTraceJson <- function() {
-  getOption("rsconnect.http.trace.json", FALSE)
+  getOption("shinyapps.http.trace.json", FALSE)
 }
 
 httpTrace <- function(method, path, time) {
