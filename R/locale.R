@@ -22,7 +22,7 @@ detectLocale.Unix <- function () {
 }
 
 detectLocale.Windows <- function (useCache =
-                                  getOption('rsconnect.locale.cache', TRUE)) {
+                                  getOption('shinyapps.locale.cache', TRUE)) {
 
   # default locale
   locale <- 'en_US'

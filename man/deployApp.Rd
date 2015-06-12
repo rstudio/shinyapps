@@ -7,7 +7,7 @@
 deployApp(appDir = getwd(), appFiles = NULL, appPrimaryDoc = NULL,
   appSourceDoc = NULL, appName = NULL, contentCategory = NULL,
   account = NULL, server = NULL, upload = TRUE,
-  launch.browser = getOption("rsconnect.launch.browser", interactive()),
+  launch.browser = getOption("shinyapps.launch.browser", interactive()),
   quiet = FALSE, lint = TRUE, metadata = list(), ...)
 }
 \arguments{

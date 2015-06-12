@@ -55,6 +55,6 @@ appDependencies("~/projects/shiny/app1")
 }
 }
 \seealso{
-\link[rsconnect:rsconnectPackages]{Using Packages with rsconnect}
+\link[shinyapps:shinyappsPackages]{Using Packages with shinyapps}
 }
 

@@ -42,7 +42,7 @@ findLocalServer <- function(url) {
 
   # helper to find a server given its URL
   findServerByUrl <- function(name) {
-    allServers <- as.data.frame(rsconnect::servers(local = TRUE))
+    allServers <- as.data.frame(shinyapps::servers(local = TRUE))
     match <- allServers[allServers$url == url, , drop = FALSE]
     if (nrow(match) == 0)
       NULL

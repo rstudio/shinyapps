@@ -60,7 +60,7 @@ serverConfigFile <- function(name) {
 
 shinyappsServerInfo <- function() {
   info <- list(name = "shinyapps.io",
-               url = getOption("rsconnect.shinyapps_url", "https://api.shinyapps.io/v1"))
+               url = getOption("shinyapps.shinyapps_url", "https://api.shinyapps.io/v1"))
 }
 
 #' @rdname servers

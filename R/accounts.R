@@ -54,7 +54,7 @@ accounts <- function(server = NULL) {
 #' @details When this function is invoked, a web browser will be opened to a
 #'   page on the target server where you will be prompted to enter your
 #'   credentials. Upon successful authentication, your local installation of
-#'   \pkg{rsconnect} and your server account will be paired, and you'll
+#'   \pkg{shinyapps} and your server account will be paired, and you'll
 #'   be able to deploy and manage applications using the package without further
 #'   prompts for credentials.
 #'

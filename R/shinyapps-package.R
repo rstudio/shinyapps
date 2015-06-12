@@ -1,4 +1,4 @@
-##' rsconnect
+##' shinyapps
 ##'
 ##' An \R package for deploying \pkg{shiny} applications.
 ##'
@@ -50,8 +50,8 @@
 ##' More information on account management is available in the
 ##' \code{\link{accounts}} help page.
 ##'
-##' @name rsconnect-package
-##' @aliases rsconnect-package rsconnect
+##' @name shinyapps-package
+##' @aliases shinyapps-package shinyapps
 ##' @docType package
 ##' @keywords package
 NULL

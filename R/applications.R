@@ -145,10 +145,10 @@ showLogs <- function(appPath = getwd(), appFile = NULL, appName = NULL,
 
   # check for streaming log compatibility
   if (streaming) {
-    httpType <- getOption("rsconnect.http", "rcurl")
+    httpType <- getOption("shinyapps.http", "rcurl")
     if (!identical("rcurl", httpType)) {
       stop("RCurl is required to show streaming logs. Install RCurl and set ",
-            "rsconnect.http to 'rcurl', or call showLogs with streaming = ",
+            "shinyapps.http to 'rcurl', or call showLogs with streaming = ",
             "FALSE to show a log snapshot.")
     }
   }
@@ -165,7 +165,7 @@ showLogs <- function(appPath = getwd(), appFile = NULL, appName = NULL,
 
     # form the command. we need to double-escape backslashes in file names, as
     # they will get collapsed twice before being resolved.
-    cmd <- paste0("rsconnect:::showStreamingLogs(",
+    cmd <- paste0("shinyapps:::showStreamingLogs(",
                   "account = '", target$account, "', ",
                   "applicationId = '", application$id, "', ",
                   "entries = ", entries, ", ",

@@ -17,6 +17,7 @@ bundleFiles <- function(appDir) {
   files <- list.files(appDir, recursive = TRUE, all.files = TRUE,
                       full.names = FALSE)
   files <- files[!grepl(glob2rx("rsconnect/*"), files)]
+  files <- files[!grepl(glob2rx("shinyapps/*"), files)]
   files <- files[!grepl(glob2rx(".svn/*"), files)]
   files <- files[!grepl(glob2rx(".git/*"), files)]
   files <- files[!grepl(glob2rx(".Rproj.user/*"), files)]
@@ -229,7 +230,7 @@ createAppManifest <- function(appDir, appMode, contentCategory, accountInfo,
   # create the manifest
   manifest <- list()
   manifest$version <- 1
-  #manifest$locale <- getOption('rsconnect.locale', detectLocale())
+  manifest$locale <- getOption('shinyapps.locale', detectLocale())
   manifest$platform <- paste(R.Version()$major, R.Version()$minor, sep = ".")
 
   metadata <- list(appmode = appMode)
