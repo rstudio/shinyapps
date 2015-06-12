@@ -1,7 +1,7 @@
-\name{rsconnectPackages}
-\alias{rsconnectPackages}
+\name{shinyappsPackages}
+\alias{shinyappsPackages}
 
-\title{Using Packages with rsconnect}
+\title{Using Packages with shinyapps}
 
 \description{
 Deployed applications can depend on any package available on \href{http://cran.rstudio.com/}{CRAN} as well as any package hosted in a public \href{https://www.github.com}{GitHub} repository.
