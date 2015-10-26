@@ -76,8 +76,7 @@ deployApp <- function(appDir = getwd(),
                                                  interactive()),
                       quiet = FALSE,
                       lint = TRUE,
-                      metadata = list(),
-                      ...) {
+                      metadata = list()) {
 
   if (!isStringParam(appDir))
     stop(stringParamErrorMessage("appDir"))
@@ -86,15 +85,6 @@ deployApp <- function(appDir = getwd(),
   appDir <- normalizePath(appDir, mustWork = FALSE)
   if (!file.exists(appDir)) {
     stop(appDir, " does not exist")
-  }
-
-  # if the primary doc was not specified, check for "appPrimaryRmd" -- this was
-  # the name of the appPrimaryDoc parameter used by older versions of the IDE
-  if (is.null(appPrimaryDoc)) {
-    args <- eval(substitute(list(...)))
-    if (!is.null(args$appPrimaryRmd)) {
-      appPrimaryDoc <- args$appPrimaryRmd
-    }
   }
 
   # create the full path that we'll deploy (append document if requested)
@@ -220,6 +210,7 @@ deployApp <- function(appDir = getwd(),
                  target$appName,
                  target$account,
                  accountDetails$server,
+                 application$id,
                  bundle$id,
                  application$url,
                  metadata)
@@ -405,6 +396,13 @@ getAppByName <- function(client, accountInfo, name) {
   # NOTE: returns a list with 0 or 1 elements
   app <- client$listApplications(accountInfo$accountId, filters = list(name = name))
   if (length(app)) app[[1]] else NULL
+}
+
+# get the record for the application with the given ID in the given account
+getAppById <- function(id, account = NULL, server = NULL) {
+  accountDetails <- accountInfo(resolveAccount(account, server), server)
+  client <- clientForAccount(accountDetails)
+  client$getApplication(id)
 }
 
 applicationForTarget <- function(client, accountInfo, target) {
