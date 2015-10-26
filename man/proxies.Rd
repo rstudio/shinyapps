@@ -1,12 +1,12 @@
-\name{rsconnectProxies}
-\alias{rsconnectProxies}
+\name{shinyappsProxies}
+\alias{shinyappsProxies}
 
 \title{HTTP Proxy Configuration}
 
 \description{
 If your system is behind an HTTP proxy then additional configuration may be required to connect to the ShinyApp service. The required configuration varies depending on what type of HTTP connection you are making to the server.
 
-The default HTTP connection type is \code{rcurl} however addition connection types \code{curl} and \code{internal} are also supported. The HTTP connection type is configured using the \code{\link[rsconnect:rsconnectOptions]{rsconnect.http}} global option.
+The default HTTP connection type is \code{rcurl} however addition connection types \code{curl} and \code{internal} are also supported. The HTTP connection type is configured using the \code{\link[shinyapps:shinyappsOptions]{shinyapps.http}} global option.
 }
 
 \section{HTTP Proxy Environment Variable}{
@@ -46,7 +46,7 @@ A list of available curl options can be found here: \href{http://curl.haxx.se/li
 If you are running on Windows and have difficulty configuring proxy settings for \code{rcurl} or \code{curl} connections, it's possible to re-use your Internet Explorer proxy settings for connections to the server. To do this you set the http connection type to \code{internal} as follows:
 
 \preformatted{
-options(rsconnect.http = "internal")
+options(shinyapps.http = "internal")
 }
 
 There are two things to keep in mind when using \code{internal} connection types:
