@@ -1,9 +1,0 @@
----
-title: Shiny R Markdown with Dots
-output: html_document
-runtime: shiny
-...
-
-Hello, world!
-
-
