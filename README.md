@@ -1,16 +1,14 @@
-shinyapps
-=======================================================
+# shinyapps.io
+Welcome to [shinyapps.io](https://www.shinyapps.io)!
 
-## Installation
+## Getting Started
 
-To install directly from GitHub, run this:
+To get started using shinyapps.io checkout the [Getting Started Guide](http://shiny.rstudio.com/articles/shinyapps.html).
 
-```r
-if (!require("devtools"))
-  install.packages("devtools")
-devtools::install_github("rstudio/shinyapps")
-```
+## Getting Help
 
-## Usage
+Need help? Checkout the [shinyapps.io User Guide](http://docs.rstudio.com/shinyapps.io/).
 
-To get started using ShinyApps checkout the [Getting Started Guide](http://shiny.rstudio.com/articles/shinyapps.html).
+Or feel free to post a message to the [shinyapps-users](https://groups.google.com/forum/#!forum/shinyapps-users) discussion group.
+
+User's with paid subscriptions can open a ticket the [RStudio Support](https://rstudioide.zendesk.com) website.
